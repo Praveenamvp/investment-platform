@@ -1,7 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entity;
+using Models.Request;
 
 namespace InvestmentApp.Controllers
 {
@@ -28,6 +28,22 @@ namespace InvestmentApp.Controllers
                 return Ok(stocks);
             }
             return NotFound("No stocks found");
+        }
+
+        [HttpPost("InsertTransaction")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult InsertTransaction(TransactionRequest req)
+        {
+            try
+            {
+                _stockService.InsertTransaction(req);
+                return Ok("Transaction inserted successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

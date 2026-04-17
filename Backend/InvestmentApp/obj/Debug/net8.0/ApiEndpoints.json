@@ -58,6 +58,37 @@
     ]
   },
   {
+    "ContainingType": "InvestmentApp.Controllers.StockController",
+    "Method": "InsertTransaction",
+    "RelativePath": "api/Stock/InsertTransaction",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "Models.Request.TransactionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
     "ContainingType": "InvestmentApp.Controllers.UserController",
     "Method": "GetAllShowTimes",
     "RelativePath": "api/User/Login",

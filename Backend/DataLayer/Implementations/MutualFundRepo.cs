@@ -42,5 +42,28 @@ namespace DataLayer.Implementations
 
             return mutualFunds;
         }
+
+        public MutualFund? GetById(Guid mutualFundId)
+        {
+            SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM [data].[MutualFunds] WHERE MutualFundId = @MutualFundId", _connection.GetConnection());
+            adapter.SelectCommand.Parameters.AddWithValue("@MutualFundId", mutualFundId);
+
+            DataSet dataSet = new DataSet();
+            adapter.Fill(dataSet);
+
+            if (dataSet.Tables.Count > 0 && dataSet.Tables[0].Rows.Count > 0)
+            {
+                DataRow row = dataSet.Tables[0].Rows[0];
+                return new MutualFund
+                {
+                    MutualFundId = Guid.Parse(row["MutualFundId"].ToString()),
+                    Name = row["Name"].ToString(),
+                    NAV = Convert.ToDecimal(row["NAV"]),
+                    ReturnsPercent = Convert.ToDecimal(row["ReturnsPercent"]),
+                    CreatedDate = Convert.ToDateTime(row["CreatedDate"])
+                };
+            }
+            return null;
+        }
     }
 }
