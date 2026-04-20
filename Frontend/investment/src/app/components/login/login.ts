@@ -1,0 +1,61 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  templateUrl: './login.html',
+  styleUrl: './login.css',
+})
+export class LoginComponent {
+  form!: ReturnType<FormBuilder['group']>;
+
+  loading = false;
+  error = '';
+  showPassword = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+  ) {
+    this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
+
+  get email() {
+    return this.form.get('email')!;
+  }
+  get password() {
+    return this.form.get('password')!;
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.loading = true;
+    this.error = '';
+
+    this.auth
+      .login({
+        email: this.email.value!,
+        password: this.password.value!,
+      })
+      .subscribe({
+        next: () => this.router.navigate(['/dashboard']),
+        error: (err: any) => {
+          this.loading = false;
+          this.error = err?.error?.message || 'Invalid email or password.';
+        },
+      });
+  }
+}
